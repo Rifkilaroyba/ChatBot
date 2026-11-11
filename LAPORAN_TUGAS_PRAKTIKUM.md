@@ -21,7 +21,7 @@
 | :--- | :--- |
 | **Nama Lapak Shopee** | **Infarm.id Official Shop** (Pusat Urban Farming & Pertanian) |
 | **Link Lapak Shopee** | [https://shopee.co.id/infarm.id](https://shopee.co.id/infarm.id) |
-| **Link Repository GitHub** | `[Isi dengan link repository GitHub Anda setelah di-push]` |
+| **Link Repository GitHub** | [https://github.com/Rifkilaroyba/ChatBot](https://github.com/Rifkilaroyba/ChatBot) |
 | **Link Website Publik (Vercel)** | `[Isi dengan link URL Vercel hasil deployment]` |
 | **Nomor CS WhatsApp Bot** | `+62 812-3456-7890` (atau nomor HP tertaut Anda) |
 
@@ -137,7 +137,7 @@ Sistem dirancang dengan arsitektur hibrida untuk mengakomodasi kebutuhan aksesib
    - Pilih repository GitHub yang baru saja diunggah.
 3. **Konfigurasi Environment Variables di Vercel:**
    - `GROQ_API_KEY`: Masukkan API Key Groq Anda dari console.groq.com.
-   - `GROQ_MODEL`: `llama-3.3-70b-versatile` (atau `qwen/qwen3.8-27b`).
+   - `GROQ_MODEL`: `qwen/qwen3.8-27b` (model aktif akun Groq).
    - `RAG_TOP_K`: `8`
 4. **Deploy:**
    - Klik tombol **Deploy**.

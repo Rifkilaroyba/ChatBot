@@ -1,0 +1,46 @@
+{
+  "keywords": {
+    "jam buka": "jam buka",
+    "jam operasional": "jam buka",
+    "buka jam": "jam buka",
+    "jadwal": "jam buka",
+    "alamat": "alamat",
+    "lokasi": "alamat",
+    "gudang": "alamat",
+    "dimana": "alamat",
+    "posisi": "alamat",
+    "cara pesan": "cara pesan",
+    "cara beli": "cara pesan",
+    "order": "cara pesan",
+    "beli": "cara pesan",
+    "pemesanan": "cara pesan",
+    "kontak": "kontak",
+    "hubungi": "kontak",
+    "telepon": "kontak",
+    "whatsapp": "kontak",
+    "wa": "kontak",
+    "cs": "kontak",
+    "admin": "kontak",
+    "pengiriman": "pengiriman",
+    "ongkir": "pengiriman",
+    "ekspedisi": "pengiriman",
+    "kirim": "pengiriman",
+    "garansi": "garansi",
+    "komplain": "garansi",
+    "retur": "garansi",
+    "rusak": "garansi",
+    "shopee": "shopee",
+    "link shopee": "shopee",
+    "toko shopee": "shopee"
+  },
+  "responses": {
+    "jam buka": "Toko *Infarm.id Official Shop* buka setiap hari Senin - Sabtu pukul 08.00 - 17.00 WIB. Pemesanan di luar jam operasional atau hari Minggu tetap diterima dan akan diproses pada hari kerja berikutnya.",
+    "alamat": "Kantor & Gudang Utama kami berlokasi di Jl. Raya Ketintang No. 45, Gayungan, Kota Surabaya, Jawa Timur 60231. Kami melayani pengiriman pesanan ke seluruh pelosok Indonesia via Shopee.",
+    "cara pesan": "Untuk melakukan pemesanan produk Infarm:\n1. Beli langsung via toko resmi Shopee di *https://shopee.co.id/infarm.id* untuk promo gratis ongkir & voucher cashback.\n2. Atau konfirmasikan pesanan langsung via chat WhatsApp ini dengan menyebutkan nama produk dan jumlah yang diinginkan.",
+    "kontak": "Informasi Kontak Resmi *Infarm.id Official Shop*:\n• *Alamat:* Jl. Raya Ketintang No. 45, Gayungan, Surabaya\n• *WhatsApp CS:* +62 812-3456-7890\n• *Shopee:* https://shopee.co.id/infarm.id\n• *Jam Operasional:* Senin - Sabtu (08.00 - 17.00 WIB)",
+    "pengiriman": "Kami bekerja sama dengan berbagai ekspedisi terpercaya: Shopee Xpress, J&T, JNE, SiCepat, Anteraja, serta pengiriman Instan/Sameday (Grab/GoSend). Paket dikemas ekstra aman menggunakan bubble wrap dan kardus tebal khusus tanaman.",
+    "garansi": "Semua produk benih dan nutrisi Infarm bergaransi keaslian 100% dan terjamin daya kecambahnya. Apabila produk rusak atau bocor selama pengiriman, kirimkan video unboxing tanpa jeda ke tim CS kami untuk pengiriman barang pengganti gratis.",
+    "shopee": "Kunjungi toko resmi Shopee kami di *https://shopee.co.id/infarm.id* untuk melihat promo diskon, flash sale, dan voucher gratis ongkir terbaru!"
+  }
+}
+

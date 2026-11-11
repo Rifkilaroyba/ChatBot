@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infarm.id Official Shop - Katalog & AI Chatbot RAG</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="brand-icon">🌱</span>
+        <div class="brand-info">
+          <h1>Infarm.id Official Shop</h1>
+          <p class="brand-badge">Official Store Shopee ⭐ 4.9</p>
+        </div>
+      </div>
+      <div class="nav-actions">
+        <a href="https://shopee.co.id/infarm.id" target="_blank" rel="noopener noreferrer" class="btn btn-shopee">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3h-6c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/>
+          </svg>
+          Kunjungi Lapak Shopee
+        </a>
+        <div class="tab-switch">
+          <button id="tabCatalogBtn" class="tab-btn active">Katalog & Web</button>
+          <button id="tabGatewayBtn" class="tab-btn">WhatsApp Gateway</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="container">
+    
+    <!-- VIEW 1: KATALOG & WEBSITE TOKO -->
+    <section id="catalogView" class="view-section active">
+      <!-- Hero Banner -->
+      <div class="hero-card">
+        <div class="hero-content">
+          <span class="hero-tag">Urban Farming & Gardening Specialis</span>
+          <h2>Koleksi Lengkap Benih, Pupuk Organik & Alat Berkebun</h2>
+          <p>Dapatkan benih bergaransi daya kecambah tinggi, nutrisi organik teruji, dan media tanam siap pakai untuk kebun rumah Anda.</p>
+          <div class="hero-features">
+            <div class="feature-item"><span>✨</span> 100% Produk Original</div>
+            <div class="feature-item"><span>🚚</span> Gratis Ongkir Seluruh Indonesia</div>
+            <div class="feature-item"><span>🤖</span> AI Chatbot RAG 24/7</div>
+            <div class="feature-item"><span>💬</span> Tanya CS via WhatsApp</div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button id="openAiChatBtn" class="btn btn-primary">
+            <span>💬</span> Tanya AI Konsultan Tanaman
+          </button>
+          <a id="btnWaKonsulHeader" href="https://wa.me/6281234567890?text=Halo%20Infarm%2C%20saya%20ingin%20konsultasi%20seputar%20produk%20berkebun" target="_blank" class="btn btn-outline-wa">
+            <span>📱</span> Chat WhatsApp CS
+          </a>
+        </div>
+      </div>
+
+      <!-- Filter & Search Toolbar -->
+      <div class="toolbar-card">
+        <div class="search-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="searchInput" placeholder="Cari benih, pupuk cabai, cocopeat, sprayer, dll...">
+        </div>
+        <div class="category-pills" id="categoryPills">
+          <button class="pill active" data-cat="all">Semua Kategori</button>
+          <button class="pill" data-cat="Pupuk">Pupuk & Nutrisi</button>
+          <button class="pill" data-cat="Benih">Benih Sayur & Buah</button>
+          <button class="pill" data-cat="Pestisida">Pestisida Nabati</button>
+          <button class="pill" data-cat="Media Tanam">Media Tanam</button>
+          <button class="pill" data-cat="Peralatan Berkebun">Alat Berkebun</button>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="section-title-row">
+        <div>
+          <h3>Katalog Produk Pilihan Infarm</h3>
+          <p id="productCountText" class="text-muted">Menampilkan produk hasil scraping resmi Shopee...</p>
+        </div>
+      </div>
+      <div class="products-grid" id="productsGrid">
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Memuat katalog produk dari database...</p>
+        </div>
+      </div>
+
+      <!-- Store Knowledge & FAQ Section -->
+      <div class="info-section">
+        <div class="info-card">
+          <div class="info-header">
+            <span class="info-icon">📍</span>
+            <h4>Lokasi & Pengiriman</h4>
+          </div>
+          <p>Jl. Raya Ketintang No. 45, Gayungan, Kota Surabaya, Jawa Timur 60231. Pengiriman aman setiap hari via ekspedisi Shopee Xpress, J&T, JNE, dan SiCepat.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-header">
+            <span class="info-icon">⏰</span>
+            <h4>Jam Operasional</h4>
+          </div>
+          <p>Senin – Sabtu: 08.00 – 17.00 WIB. Chatbot AI dan pemesanan Shopee tetap aktif melayani Anda 24 jam non-stop.</p>
+        </div>
+        <div class="info-card">
+          <div class="info-header">
+            <span class="info-icon">🛡️</span>
+            <h4>Garansi Keaslian</h4>
+          </div>
+          <p>Semua produk benih dan pupuk Infarm memiliki jaminan keaslian 100% dan garansi ganti baru jika barang bocor atau rusak dalam perjalanan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: WHATSAPP BOT GATEWAY & DASHBOARD ADMIN -->
+    <section id="gatewayView" class="view-section">
+      <div class="header-card">
+        <div class="header-top">
+          <div>
+            <h2>Gateway WhatsApp & Monitoring Bot</h2>
+            <p class="subtitle">Kontrol integrasi bot WhatsApp Web lokal dengan mesin RAG dan Groq LLM</p>
+          </div>
+          <div class="status-wrapper">
+            <span class="status-indicator" id="statusDot"></span>
+            <span id="statusText">Bot Offline</span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <button id="startBtn" class="btn btn-success">Mulai Bot</button>
+          <button id="stopBtn" class="btn btn-danger hidden">Hentikan Bot</button>
+          <button id="resetBtn" class="btn btn-secondary" title="Hapus sesi WhatsApp jika tersangkut">Reset Sesi WA</button>
+        </div>
+      </div>
+
+      <!-- QR Code Section -->
+      <div id="qrSection" class="panel hidden">
+        <div class="panel-header">
+          <h3>Pindai Kode QR WhatsApp</h3>
+          <p>Buka aplikasi WhatsApp di HP Anda &rarr; <strong>Perangkat Tertaut</strong> &rarr; <strong>Tautkan Perangkat</strong>, lalu scan QR Code berikut:</p>
+        </div>
+        <div id="qrcode">
+          <div class="loading-spinner">Menunggu kode QR dari engine WhatsApp Web...</div>
+        </div>
+      </div>
+
+      <!-- Ready Status Section -->
+      <div id="readySection" class="panel hidden">
+        <div class="ready-badge">
+          <div class="ready-icon">✓</div>
+          <div class="ready-content">
+            <div class="ready-header-row">
+              <h3>Bot WhatsApp Terhubung & Aktif</h3>
+              <span id="botNumberBadge" class="bot-number-badge">Nomor: <strong id="botNumberText">-</strong></span>
+            </div>
+            <p>Bot siap merespons chat pelanggan secara otomatis menggunakan arsitektur RAG dan data produk lapak Shopee.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel Monitoring Kuota Groq AI -->
+      <div class="panel" id="groqQuotaSection">
+        <div class="quota-header">
+          <div>
+            <h3>Monitoring Kuota Groq AI Cloud</h3>
+            <p class="section-desc">Sisa kuota request harian, batas token (TPM), dan model Groq aktif.</p>
+          </div>
+          <button id="refreshQuotaBtn" class="btn btn-outline btn-sm">Perbarui Kuota</button>
+        </div>
+        <div class="quota-grid">
+          <div class="quota-card">
+            <div class="quota-card-label">Sisa Request</div>
+            <div class="quota-card-value" id="groqReqRemaining">Memuat...</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="groqReqBar" style="width: 100%;"></div>
+            </div>
+            <div class="quota-card-sub" id="groqReqReset">Reset dalam: -</div>
+          </div>
+          <div class="quota-card">
+            <div class="quota-card-label">Sisa Token (TPM)</div>
+            <div class="quota-card-value" id="groqTokenRemaining">Memuat...</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill tokens" id="groqTokenBar" style="width: 100%;"></div>
+            </div>
+            <div class="quota-card-sub">Batas Token Menit Ini</div>
+          </div>
+          <div class="quota-card">
+            <div class="quota-card-label">Model Groq Digunakan</div>
+            <div class="quota-card-value model-name" id="groqModelName">Memuat...</div>
+            <div class="quota-card-sub" id="groqLastChecked">Pembaruan: Baru saja</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Basis Pengetahuan & Tabel Produk Source -->
+      <div class="panel">
+        <h3>Basis Pengetahuan Manual (FAQ / Quick Responses)</h3>
+        <p class="section-desc">Kata kunci dan jawaban instan tanpa memanggil Groq AI (hemat kuota).</p>
+        <div id="knowledgeList" class="knowledge-tags">
+          <em>Memuat daftar kata kunci...</em>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Basis Data RAG Sumber CSV (<code>data/products.csv</code>)</h3>
+        <p class="section-desc">Katalog terstruktur hasil web scraping lapak Shopee Infarm.id.</p>
+        <div class="table-responsive">
+          <table id="productsTable">
+            <thead>
+              <tr>
+                <th>Nama Produk</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Deskripsi</th>
+                <th>Link Shopee</th>
+              </tr>
+            </thead>
+            <tbody id="productsBody">
+              <tr><td colspan="5" style="text-align:center;">Memuat data produk...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING AI CHATBOT WIDGET -->
+  <div class="chatbot-wrapper">
+    <!-- Chat Toggle Button -->
+    <button id="chatToggleBtn" class="chat-toggle-btn" aria-label="Buka Chat AI">
+      <span class="chat-btn-icon">💬</span>
+      <span class="chat-btn-label">Tanya AI Infarm</span>
+      <span class="chat-btn-badge">RAG</span>
+    </button>
+
+    <!-- Chat Window Container -->
+    <div id="chatWindow" class="chat-window hidden">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-user">
+          <div class="avatar">🌱</div>
+          <div>
+            <h4>AI Konsultan Infarm</h4>
+            <span class="chat-status"><span class="dot"></span> Online &bull; Berbasis RAG & Groq LLM</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button id="chatMinimizeBtn" class="icon-btn" title="Tutup Chat">&times;</button>
+        </div>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="chat-chips-scroll">
+        <button class="chip" data-msg="Rekomendasi pupuk untuk tanaman cabai">Pupuk Cabai</button>
+        <button class="chip" data-msg="Ada benih sayur apa saja untuk pemula?">Benih Pemula</button>
+        <button class="chip" data-msg="Berapa jam operasional toko?">Jam Buka</button>
+        <button class="chip" data-msg="Bagaimana cara memesan di Shopee?">Cara Pesan</button>
+      </div>
+
+      <!-- Chat Messages Body -->
+      <div class="chat-messages" id="chatMessages">
+        <div class="message-bubble bot">
+          <div class="bubble-content">
+            Halo Kak! Selamat datang di <strong>Infarm.id Official Shop</strong> 🌱<br><br>
+            Saya adalah asisten AI berbasis <strong>Retrieval-Augmented Generation (RAG)</strong>. Saya dapat membantu merekomendasikan benih, pupuk organik, pestisida, dan media tanam resmi dari toko Shopee kami.<br><br>
+            Ada yang bisa saya bantu hari ini?
+          </div>
+          <span class="bubble-time">Asisten Toko</span>
+        </div>
+      </div>
+
+      <!-- Chat Input Form -->
+      <form id="chatForm" class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Tanya tentang pupuk, benih, media tanam..." autocomplete="off">
+        <button type="submit" id="chatSendBtn" class="btn-send" aria-label="Kirim">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h5>Infarm.id Official Shop</h5>
+        <p>Solusi urban farming dan pertanian modern untuk seluruh keluarga di Indonesia.</p>
+        <p class="copy">&copy; 2026 Infarm.id &bull; Modul Praktikum AI Chatbot RAG</p>
+      </div>
+      <div class="footer-col">
+        <h5>Tautan Toko</h5>
+        <ul class="footer-links">
+          <li><a href="https://shopee.co.id/infarm.id" target="_blank">Lapak Resmi Shopee</a></li>
+          <li><a href="https://wa.me/6281234567890" target="_blank">WhatsApp Customer Service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+

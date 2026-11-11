@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
@@ -13,3 +13,5 @@ export default function handler(req, res) {
   });
 }
 
+module.exports = handler;
+module.exports.default = handler;

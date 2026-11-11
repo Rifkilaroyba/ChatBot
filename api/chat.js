@@ -1,7 +1,13 @@
 const fs = require("fs");
 const path = require("path");
 const Groq = require("groq-sdk");
-const RAGEngine = require("../lib/rag");
+
+let RAGEngine;
+try {
+  RAGEngine = require("../lib/rag");
+} catch (e) {
+  RAGEngine = require(path.join(process.cwd(), "lib/rag.js"));
+}
 
 // Load Knowledge
 let knowledge = { keywords: {}, responses: {} };
@@ -56,7 +62,7 @@ function isGratitudeMessage(text) {
   return /^(terima\s*kasih|makasih|makasi|thanks|thank\s*you|thx|matur\s*nuwun|nuhun|syukron)\b/i.test(q);
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
   // Set CORS headers
   res.setHeader("Access-Control-Allow-Credentials", true);
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -75,6 +81,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed. Use POST." });
   }
 
+  let ragContext = "";
   try {
     const { message, history = [] } = req.body || {};
     if (!message || message.trim() === "") {
@@ -123,7 +130,7 @@ export default async function handler(req, res) {
 
     // 5. RAG Retrieval dari katalog CSV
     ragEngine.loadData();
-    let ragContext = ragEngine.buildContext(message);
+    ragContext = ragEngine.buildContext(message);
     if (!ragContext && Array.isArray(history) && history.length > 0) {
       const prevQueries = history
         .filter(h => h.role === "user")
@@ -137,7 +144,7 @@ export default async function handler(req, res) {
     const hasGroqKey = Boolean(
       process.env.GROQ_API_KEY &&
       process.env.GROQ_API_KEY.trim() !== "" &&
-      !process.env.GROQ_API_KEY.includes("isi_api_key_groq")
+      !process.env.GROQ_API_KEY.includes("your_groq_api_key")
     );
 
     if (!hasGroqKey) {
@@ -180,10 +187,10 @@ PRINSIP KEAKURATAN DATA PRODUK (BERPIJAK KETAT PADA KATALOG RESMI INFARM):
 ${ragContext ? ragContext : "Konteks Katalog: (Tidak ada katalog spesifik yang cocok. Jawab dengan ramah seputar kebutuhan berkebun dan tawarkan bantuan produk Infarm)."}`;
 
     const candidateModels = [
-      process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
-      "llama-3.1-8b-instant",
-      "qwen/qwen3.8-27b",
-      "mixtral-8x7b-32768"
+      process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
+      "openai/gpt-oss-20b",
+      "allam-2-7b",
+      "openai/gpt-oss-120b"
     ];
 
     const messagesPayload = [
@@ -231,3 +238,5 @@ ${ragContext ? ragContext : "Konteks Katalog: (Tidak ada katalog spesifik yang c
   }
 }
 
+module.exports = handler;
+module.exports.default = handler;

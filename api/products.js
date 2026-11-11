@@ -1,7 +1,13 @@
 const path = require("path");
-const RAGEngine = require("../lib/rag");
 
-export default function handler(req, res) {
+let RAGEngine;
+try {
+  RAGEngine = require("../lib/rag");
+} catch (e) {
+  RAGEngine = require(path.join(process.cwd(), "lib/rag.js"));
+}
+
+function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET");
 
@@ -15,3 +21,5 @@ export default function handler(req, res) {
   }
 }
 
+module.exports = handler;
+module.exports.default = handler;

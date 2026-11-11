@@ -57,7 +57,7 @@ let isCleaning = false;
 
 // ================= KUOTA & RATE LIMIT GROQ AI =================
 let groqQuota = {
-  model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+  model: process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
   remainingRequests: null,
   limitRequests: null,
   remainingTokens: null,
@@ -69,7 +69,7 @@ let groqQuota = {
 
 function updateGroqQuotaFromHeaders(headers, modelName) {
   if (!headers) return;
-  groqQuota.model = modelName || process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  groqQuota.model = modelName || process.env.GROQ_MODEL || "qwen/qwen3.8-27b";
   const remReq = headers.get ? headers.get("x-ratelimit-remaining-requests") : headers["x-ratelimit-remaining-requests"];
   const limReq = headers.get ? headers.get("x-ratelimit-limit-requests") : headers["x-ratelimit-limit-requests"];
   const remTok = headers.get ? headers.get("x-ratelimit-remaining-tokens") : headers["x-ratelimit-remaining-tokens"];
@@ -93,7 +93,7 @@ async function fetchGroqQuotaFresh() {
       return groqQuota;
     }
   }
-  const modelToUse = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
+  const modelToUse = process.env.GROQ_MODEL || "qwen/qwen3.8-27b";
   try {
     const { response } = await groq.chat.completions.create({
       model: modelToUse,
@@ -375,10 +375,10 @@ ${ragContext ? ragContext : "Konteks Katalog: (Tidak ada katalog spesifik yang c
     ];
 
     const candidateModels = [
-      process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
-      "llama-3.1-8b-instant",
-      "qwen/qwen3.8-27b",
-      "mixtral-8x7b-32768"
+      process.env.GROQ_MODEL || "qwen/qwen3.8-27b",
+      "openai/gpt-oss-20b",
+      "allam-2-7b",
+      "openai/gpt-oss-120b"
     ];
 
     let lastError = null;

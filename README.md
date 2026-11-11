@@ -91,9 +91,9 @@ Buka browser di **`http://localhost:3001`**:
 3. Klik **Add New Project** &rarr; pilih repository **ChatBot**.
 4. Tambahkan Environment Variable di pengaturan Vercel:
    - `GROQ_API_KEY`: Masukkan API Key Groq Anda
-   - `GROQ_MODEL`: `llama-3.3-70b-versatile`
+   - `GROQ_MODEL`: `qwen/qwen3.8-27b`
    - `RAG_TOP_K`: `8`
-5. Klik **Deploy**. Selesai! Website publik Anda siap diakses online.
+5. Klik **Deploy**. Website publik Anda siap diakses (misal: `https://infarm-chatbot-rifki.vercel.app`).
 
 ---
 

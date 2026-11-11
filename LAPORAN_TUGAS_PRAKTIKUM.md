@@ -22,7 +22,7 @@
 | **Nama Lapak Shopee** | **Infarm.id Official Shop** (Pusat Urban Farming & Pertanian) |
 | **Link Lapak Shopee** | [https://shopee.co.id/infarm.id](https://shopee.co.id/infarm.id) |
 | **Link Repository GitHub** | [https://github.com/Rifkilaroyba/ChatBot](https://github.com/Rifkilaroyba/ChatBot) |
-| **Link Website Publik (Vercel)** | `[Isi dengan link URL Vercel hasil deployment]` |
+| **Link Website Publik (Vercel)** | [https://infarm-chatbot-rifki.vercel.app](https://infarm-chatbot-rifki.vercel.app) |
 | **Nomor CS WhatsApp Bot** | `+62 812-3456-7890` (atau nomor HP tertaut Anda) |
 
 ---

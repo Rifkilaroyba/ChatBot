@@ -23,10 +23,14 @@
   --whatsapp-border: #bbf7d0;
 
   /* Neutrals & Typography */
-  --text-main: #0f172a;       /* slate-900 */
-  --text-secondary: #334155;  /* slate-700 */
-  --text-muted: #64748b;      /* slate-500 */
-  --text-light: #94a3b8;      /* slate-400 */
+  --text-main: #0f172a;
+  /* slate-900 */
+  --text-secondary: #334155;
+  /* slate-700 */
+  --text-muted: #64748b;
+  /* slate-500 */
+  --text-light: #94a3b8;
+  /* slate-400 */
 
   /* Surfaces & Borders */
   --bg-page: #f8fafc;
@@ -58,7 +62,9 @@
 }
 
 /* Base Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -751,7 +757,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ================= TRUST & GUARANTEE CARDS ================= */
@@ -853,12 +861,35 @@ body {
   flex-wrap: wrap;
 }
 
-.btn-success { background: var(--brand-primary); color: #fff; }
-.btn-success:hover { background: var(--brand-primary-hover); }
-.btn-danger { background: var(--danger); color: #fff; }
-.btn-secondary { background: #64748b; color: #fff; }
-.btn-outline { background: transparent; border: 1px solid var(--border-subtle); color: var(--text-secondary); }
-.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-success {
+  background: var(--brand-primary);
+  color: #fff;
+}
+
+.btn-success:hover {
+  background: var(--brand-primary-hover);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #64748b;
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
 
 .panel-card-heading {
   font-size: 16px;
@@ -960,7 +991,8 @@ table {
   font-size: 13px;
 }
 
-th, td {
+th,
+td {
   padding: 10px 14px;
   text-align: left;
   border-bottom: 1px solid var(--border-subtle);
@@ -1365,13 +1397,16 @@ tr:hover td {
   .hero-section {
     padding: 24px 20px;
   }
+
   .hero-title {
     font-size: 22px;
   }
+
   .footer-inner {
     grid-template-columns: 1fr;
     gap: 24px;
   }
+
   .chat-window {
     width: calc(100vw - 32px);
     right: -10px;

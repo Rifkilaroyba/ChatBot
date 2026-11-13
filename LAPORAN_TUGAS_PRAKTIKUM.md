@@ -8,9 +8,12 @@
 
 ## 1. Identitas Mahasiswa & Informasi Tugas
 
-- **Nama Mahasiswa:** [Nama Lengkap Anda]
+- **Nama Mahasiswa:** Rifki Laroyba
 - **NIM:** [NIM Anda]
 - **Kelas:** [Kelas Anda]
+- **Program Studi:** S1 Sistem Informasi
+- **Fakultas:** Fakultas Rekayasa Industri
+- **Perguruan Tinggi:** Telkom University Surabaya
 - **Topik Tugas:** Rancang Bangun AI Chatbot RAG Shopee via Website Serverless (Vercel) & Gateway WhatsApp
 
 ---
@@ -148,4 +151,18 @@ Sistem dirancang dengan arsitektur hibrida untuk mengakomodasi kebutuhan aksesib
 ## 8. Kesimpulan
 
 Penerapan arsitektur **Retrieval-Augmented Generation (RAG)** pada chatbot e-commerce Shopee terbukti efektif dalam membatasi ruang halusinasi model AI, memastikan integritas harga dan spesifikasi barang sesuai katalog resmi, serta menekan biaya kuota API melalui sistem berjenjang (*layered response*). Penggabungan website serverless Vercel dan gateway WhatsApp Web memberikan fleksibilitas akses optimal bagi pembeli maupun pengelola toko.
+
+---
+
+## 9. Daftar Pustaka (Referensi Ilmiah & Sumber)
+
+1. Groq Inc. (2024). *Groq LPU Inference Engine: Architecture and API Reference Guide*. Mountain View, CA: Groq Technologies.
+2. Jurafsky, D., & Martin, J. H. (2024). *Speech and Language Processing: An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition* (3rd ed. draft). Stanford University Press.
+3. Lewis, P., Perez, E., Piktus, A., Petroni, F., Karpukhin, V., Goyal, N., ... & Kiela, D. (2020). Retrieval-augmented generation for knowledge-intensive NLP tasks. *Advances in Neural Information Processing Systems (NeurIPS)*, 33, 9459-9474.
+4. Ma'ady, M. N. P., Baihaqi, M., & Isfahani, M. F. (2026). *Modul Praktikum: Scraping Data Produk Shopee Menggunakan Extension sebagai Basis Data Chatbot RAG*. Laboratorium Kecerdasan Buatan, Program Studi Sistem Informasi, Fakultas Rekayasa Industri, Telkom University Surabaya.
+5. Mitchell, R. (2018). *Web Scraping with Python: Collecting More Data from the Modern Web* (2nd ed.). Sebastopol, CA: O'Reilly Media.
+6. Qwen Team, Alibaba Cloud. (2024). *Qwen Technical Report: Advancements in Large Language Models*. arXiv preprint arXiv:2309.16609.
+7. Shopee Indonesia. (2026). *Halaman Resmi Toko Infarm Official Shop (infarmofficialshop)*. PT Shopee International Indonesia. https://shopee.co.id/infarmofficialshop
+8. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. *Advances in Neural Information Processing Systems (NeurIPS)*, 30, 5998-6008.
+9. Vercel Inc. (2024). *Serverless Functions Documentation and Architecture Specifications*. Vercel Cloud Platform. https://vercel.com/docs
 

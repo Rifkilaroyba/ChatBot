@@ -19,11 +19,11 @@
 
 | Komponen | Informasi / Tautan |
 | :--- | :--- |
-| **Nama Lapak Shopee** | **Infarm.id Official Shop** (Pusat Urban Farming & Pertanian) |
-| **Link Lapak Shopee** | [https://shopee.co.id/infarm.id](https://shopee.co.id/infarm.id) |
+| **Nama Lapak Shopee** | **Infarm Official Shop** (Pusat Urban Farming & Pertanian) |
+| **Link Lapak Shopee** | [https://shopee.co.id/infarmofficialshop](https://shopee.co.id/infarmofficialshop) |
 | **Link Repository GitHub** | [https://github.com/Rifkilaroyba/ChatBot](https://github.com/Rifkilaroyba/ChatBot) |
 | **Link Website Publik (Vercel)** | [https://infarm-chatbot-rifki.vercel.app](https://infarm-chatbot-rifki.vercel.app) |
-| **Nomor CS WhatsApp Bot** | `+62 812-3456-7890` (atau nomor HP tertaut Anda) |
+| **Nomor CS WhatsApp Bot** | `081331208493` (`+62 813-3120-8493`) |
 
 ---
 
@@ -46,7 +46,7 @@ Pengambilan data produk lapak Shopee dilakukan sesuai instruksi modul pendukung 
 
 ### Langkah-langkah Scraping:
 1. Membuka peramban Google Chrome dan memasang ekstensi **Instant Data Scraper** dari Chrome Web Store.
-2. Membuka halaman produk resmi Infarm di Shopee: `https://shopee.co.id/infarm.id`.
+2. Membuka halaman produk resmi Infarm di Shopee: `https://shopee.co.id/infarmofficialshop`.
 3. Membuka panel ekstensi dan menggunakan fitur **Try another table** hingga data nama produk, harga, dan URL produk terdeteksi dengan tepat.
 4. Menemukan pagination dengan fitur **Locate 'Next' Button** (tombol navigasi `>`).
 5. Menjalankan proses ekstraksi (*crawling*) hingga terkumpul puluhan baris data produk.

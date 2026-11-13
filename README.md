@@ -5,7 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Proyek ini adalah implementasi tugas praktikum kecerdasan buatan (**Retrieval-Augmented Generation / RAG**) yang menggabungkan:
-1. **Website Interaktif & Katalog Produk** lapak Shopee [**Infarm.id Official Shop**](https://shopee.co.id/infarm.id) yang siap di-deploy secara *serverless* ke **Vercel**.
+1. **Website Interaktif & Katalog Produk** lapak Shopee [**Infarm Official Shop**](https://shopee.co.id/infarmofficialshop) yang siap di-deploy secara *serverless* ke **Vercel**.
 2. **Widget Floating AI Chatbot** bertenaga Groq Cloud LLM dan RAG lokal.
 3. **Gateway Bot WhatsApp** berbasis `whatsapp-web.js` untuk melayani pembeli langsung via WhatsApp.
 4. **Tombol Chat WhatsApp Otomatis** dengan pesan terisi sesuai produk menggunakan `encodeURIComponent`.

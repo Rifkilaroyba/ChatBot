@@ -1,14 +1,20 @@
-// Configuration & API Base
-const API_URL = "/api";
-const WA_PHONE_NUMBER = "6281234567890"; // Nomor WhatsApp CS Toko
+// =====================================================================
+// INFARM OFFICIAL SHOP — APPLICATION SCRIPT
+// Store Catalog, RAG Search, Floating AI Assistant, & Gateway Monitor
+// =====================================================================
 
-// State Variables
+const API_URL = "/api";
+const WA_PHONE_NUMBER = "6281331208493"; // CS Resmi Infarm
+const SHOPEE_STORE_URL = "https://shopee.co.id/infarmofficialshop";
+
+// Global State
 let allProducts = [];
 let activeCategory = "all";
+let activeSort = "default";
 let chatHistory = [];
 let currentQRCode = null;
 
-// DOM Elements: Navigation Tabs
+// DOM Elements: Navigation
 const tabCatalogBtn = document.getElementById("tabCatalogBtn");
 const tabGatewayBtn = document.getElementById("tabGatewayBtn");
 const catalogView = document.getElementById("catalogView");
@@ -17,6 +23,8 @@ const gatewayView = document.getElementById("gatewayView");
 // DOM Elements: Catalog
 const productsGrid = document.getElementById("productsGrid");
 const searchInput = document.getElementById("searchInput");
+const searchClearBtn = document.getElementById("searchClearBtn");
+const sortSelect = document.getElementById("sortSelect");
 const categoryPills = document.getElementById("categoryPills");
 const productCountText = document.getElementById("productCountText");
 const productsBody = document.getElementById("productsBody");
@@ -50,25 +58,27 @@ const groqModelName = document.getElementById("groqModelName");
 const groqLastChecked = document.getElementById("groqLastChecked");
 
 // ================= TAB NAVIGATION =================
-tabCatalogBtn.addEventListener("click", () => {
-  tabCatalogBtn.classList.add("active");
-  tabGatewayBtn.classList.remove("active");
-  catalogView.classList.add("active");
-  gatewayView.classList.remove("active");
-});
+if (tabCatalogBtn && tabGatewayBtn) {
+  tabCatalogBtn.addEventListener("click", () => {
+    tabCatalogBtn.classList.add("active");
+    tabGatewayBtn.classList.remove("active");
+    catalogView.classList.add("active");
+    gatewayView.classList.remove("active");
+  });
 
-tabGatewayBtn.addEventListener("click", () => {
-  tabGatewayBtn.classList.add("active");
-  tabCatalogBtn.classList.remove("active");
-  gatewayView.classList.add("active");
-  catalogView.classList.remove("active");
-  checkBotStatus();
-});
+  tabGatewayBtn.addEventListener("click", () => {
+    tabGatewayBtn.classList.add("active");
+    tabCatalogBtn.classList.remove("active");
+    gatewayView.classList.add("active");
+    catalogView.classList.remove("active");
+    checkBotStatus();
+  });
+}
 
 // ================= FORMAT CURRENCY =================
-function formatIDR(numStr) {
-  const num = Number(numStr);
-  if (isNaN(num)) return numStr || "Hubungi CS";
+function formatIDR(numVal) {
+  const num = Number(numVal);
+  if (isNaN(num)) return numVal || "Hubungi CS";
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -86,35 +96,62 @@ async function loadProducts() {
     renderProductsTable();
   } catch (err) {
     console.error("Gagal memuat produk:", err);
-    productsGrid.innerHTML = `
-      <div class="loading-state">
-        <p style="color: #ef4444;">Gagal memuat data produk dari server.</p>
-      </div>
-    `;
+    if (productsGrid) {
+      productsGrid.innerHTML = `
+        <div class="loading-state">
+          <p style="color: #ef4444;">Gagal memuat data produk dari server.</p>
+        </div>
+      `;
+    }
   }
 }
 
 function renderProducts() {
-  const searchTerm = searchInput.value.toLowerCase().trim();
+  if (!productsGrid) return;
+  const searchTerm = (searchInput ? searchInput.value : "").toLowerCase().trim();
 
-  const filtered = allProducts.filter(p => {
-    const matchCat = activeCategory === "all" || (p.kategori && p.kategori.toLowerCase() === activeCategory.toLowerCase());
+  // Toggle clear search button
+  if (searchClearBtn) {
+    if (searchTerm.length > 0) {
+      searchClearBtn.classList.remove("hidden");
+    } else {
+      searchClearBtn.classList.add("hidden");
+    }
+  }
+
+  // Filter
+  let filtered = allProducts.filter(p => {
+    const matchCat =
+      activeCategory === "all" ||
+      (p.kategori && p.kategori.toLowerCase() === activeCategory.toLowerCase());
+
     const matchSearch =
       !searchTerm ||
       (p.nama && p.nama.toLowerCase().includes(searchTerm)) ||
       (p.deskripsi && p.deskripsi.toLowerCase().includes(searchTerm)) ||
       (p.kategori && p.kategori.toLowerCase().includes(searchTerm));
+
     return matchCat && matchSearch;
   });
 
+  // Sort
+  if (activeSort === "price-asc") {
+    filtered.sort((a, b) => Number(a.harga) - Number(b.harga));
+  } else if (activeSort === "price-desc") {
+    filtered.sort((a, b) => Number(b.harga) - Number(a.harga));
+  } else if (activeSort === "name-asc") {
+    filtered.sort((a, b) => (a.nama || "").localeCompare(b.nama || ""));
+  }
+
+  // Update Counter
   if (productCountText) {
-    productCountText.textContent = `Menampilkan ${filtered.length} produk dari total ${allProducts.length} katalog`;
+    productCountText.textContent = `Menampilkan ${filtered.length} produk resmi dari total ${allProducts.length} katalog`;
   }
 
   if (filtered.length === 0) {
     productsGrid.innerHTML = `
       <div class="loading-state">
-        <p>Tidak ada produk yang cocok dengan pencarian "<strong>${searchTerm}</strong>".</p>
+        <p>Tidak ada produk yang cocok dengan kata kunci "<strong>${searchTerm}</strong>".</p>
       </div>
     `;
     return;
@@ -122,26 +159,32 @@ function renderProducts() {
 
   productsGrid.innerHTML = filtered.map(p => {
     const formattedPrice = formatIDR(p.harga);
-    const shopeeUrl = p["contents href"] || "https://shopee.co.id/infarm.id";
+    const shopeeUrl = p["contents href"] || SHOPEE_STORE_URL;
     
-    // Generate Pre-filled WhatsApp link using encodeURIComponent
-    const waText = `Halo Infarm.id Official Shop! Saya tertarik dengan produk *${p.nama}* (Kategori: ${p.kategori}, Harga: ${formattedPrice}). Apakah produk ini masih ready stok?`;
+    // Pre-filled WhatsApp link
+    const waText = `Halo CS Infarm Official Shop, saya tertarik dengan produk *${p.nama}* (${formattedPrice}). Apakah produk ini masih ready stok?`;
     const waUrl = `https://wa.me/${WA_PHONE_NUMBER}?text=${encodeURIComponent(waText)}`;
 
     return `
       <div class="product-card">
         <div>
-          <span class="product-cat-tag">${p.kategori || "Produk"}</span>
-          <h4 class="product-title">${p.nama}</h4>
+          <div class="product-card-top">
+            <span class="product-category-tag">${p.kategori || "Produk"}</span>
+            <span class="product-stock-tag">Ready Stok</span>
+          </div>
+          <h4 class="product-title" title="${p.nama}">${p.nama}</h4>
           <p class="product-desc">${p.deskripsi || ""}</p>
         </div>
-        <div>
-          <div class="product-price">${formattedPrice}</div>
-          <div class="product-actions">
-            <a href="${shopeeUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-shopee-sm">
+        <div class="product-card-bottom">
+          <div class="product-price-row">
+            <span class="product-price">${formattedPrice}</span>
+            <span class="product-price-sub">Harga Shopee</span>
+          </div>
+          <div class="product-card-actions">
+            <a href="${shopeeUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-shopee">
               Beli di Shopee
             </a>
-            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-wa-sm">
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-card-wa">
               Tanya via WA
             </a>
           </div>
@@ -159,12 +202,14 @@ function renderProductsTable() {
   }
   productsBody.innerHTML = allProducts.map(p => {
     const formatted = formatIDR(p.harga);
-    const shopeeLink = p["contents href"] ? `<a href="${p["contents href"]}" target="_blank">Buka Link</a>` : "-";
+    const shopeeLink = p["contents href"]
+      ? `<a href="${p["contents href"]}" target="_blank" rel="noopener noreferrer" style="color:#ee4d2d; font-weight:600;">Lihat di Shopee</a>`
+      : "-";
     return `
       <tr>
         <td><strong>${p.nama}</strong></td>
-        <td><span class="tag-item">${p.kategori}</span></td>
-        <td>${formatted}</td>
+        <td><span class="tag-badge">${p.kategori}</span></td>
+        <td style="font-weight:700; color:#15803d;">${formatted}</td>
         <td>${p.deskripsi}</td>
         <td>${shopeeLink}</td>
       </tr>
@@ -172,17 +217,33 @@ function renderProductsTable() {
   }).join("");
 }
 
-// Search and Category Listeners
+// Search, Clear & Category Listeners
 if (searchInput) {
   searchInput.addEventListener("input", renderProducts);
 }
 
+if (searchClearBtn) {
+  searchClearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    renderProducts();
+    searchInput.focus();
+  });
+}
+
+if (sortSelect) {
+  sortSelect.addEventListener("change", e => {
+    activeSort = e.target.value;
+    renderProducts();
+  });
+}
+
 if (categoryPills) {
   categoryPills.addEventListener("click", e => {
-    if (e.target.classList.contains("pill")) {
+    const pill = e.target.closest(".pill");
+    if (pill) {
       document.querySelectorAll("#categoryPills .pill").forEach(p => p.classList.remove("active"));
-      e.target.classList.add("active");
-      activeCategory = e.target.getAttribute("data-cat");
+      pill.classList.add("active");
+      activeCategory = pill.getAttribute("data-cat");
       renderProducts();
     }
   });
@@ -190,18 +251,21 @@ if (categoryPills) {
 
 // ================= FLOATING AI CHATBOT WIDGET =================
 function toggleChat() {
+  if (!chatWindow) return;
   chatWindow.classList.toggle("hidden");
-  if (!chatWindow.classList.contains("hidden")) {
+  if (!chatWindow.classList.contains("hidden") && chatInput) {
     chatInput.focus();
   }
 }
 
-chatToggleBtn.addEventListener("click", toggleChat);
-chatMinimizeBtn.addEventListener("click", toggleChat);
+if (chatToggleBtn) chatToggleBtn.addEventListener("click", toggleChat);
+if (chatMinimizeBtn) chatMinimizeBtn.addEventListener("click", toggleChat);
+
 if (openAiChatBtn) {
   openAiChatBtn.addEventListener("click", () => {
+    if (!chatWindow) return;
     chatWindow.classList.remove("hidden");
-    chatInput.focus();
+    if (chatInput) chatInput.focus();
   });
 }
 
@@ -209,7 +273,7 @@ if (openAiChatBtn) {
 document.querySelectorAll(".chat-chips-scroll .chip").forEach(chip => {
   chip.addEventListener("click", () => {
     const msg = chip.getAttribute("data-msg");
-    if (msg) {
+    if (msg && chatInput && chatForm) {
       chatInput.value = msg;
       chatForm.dispatchEvent(new Event("submit"));
     }
@@ -219,70 +283,77 @@ document.querySelectorAll(".chat-chips-scroll .chip").forEach(chip => {
 // Format markdown text for chat bubble display
 function formatChatMessage(text) {
   if (!text) return "";
-  // Bold: *teks* or **teks** -> <strong>teks</strong>
   let html = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.*?)\*/g, "<strong>$1</strong>");
 
-  // Links: replace URLs with clickable links
+  // Format bullet points
+  html = html.replace(/^[•\-*]\s+(.*)$/gm, "<li>$1</li>");
+  if (html.includes("<li>")) {
+    html = html.replace(/(<li>.*?<\/li>)/gs, "<ul style='margin: 6px 0 6px 18px;'>$1</ul>");
+  }
+
+  // Format URLs
   html = html.replace(
     /(https?:\/\/[^\s]+)/g,
     '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
   );
 
-  // Newlines to <br>
   html = html.replace(/\n/g, "<br>");
   return html;
 }
 
-chatForm.addEventListener("submit", async e => {
-  e.preventDefault();
-  const text = chatInput.value.trim();
-  if (!text) return;
+if (chatForm) {
+  chatForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
 
-  // 1. Render User Message
-  appendMessage(text, "user");
-  chatInput.value = "";
+    // 1. Render User Message
+    appendMessage(text, "user");
+    chatInput.value = "";
 
-  // 2. Add Typing Indicator
-  const typingId = appendTypingIndicator();
+    // 2. Add Typing Indicator
+    const typingId = appendTypingIndicator();
 
-  try {
-    const res = await fetch(`${API_URL}/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: text,
-        history: chatHistory
-      })
-    });
+    try {
+      const res = await fetch(`${API_URL}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          history: chatHistory
+        })
+      });
 
-    const data = await res.json();
-    removeTypingIndicator(typingId);
+      const data = await res.json();
+      removeTypingIndicator(typingId);
 
-    const reply = data.reply || "Mohon maaf, terjadi gangguan saat menghubungi asisten AI.";
-    appendMessage(reply, "bot");
+      const reply = data.reply || "Mohon maaf, terjadi gangguan saat menghubungi asisten AI.";
+      appendMessage(reply, "bot");
 
-    // Save to local session history
-    chatHistory.push({ role: "user", content: text });
-    chatHistory.push({ role: "assistant", content: reply });
-    if (chatHistory.length > 6) {
-      chatHistory = chatHistory.slice(-6);
+      // Save to local session history
+      chatHistory.push({ role: "user", content: text });
+      chatHistory.push({ role: "assistant", content: reply });
+      if (chatHistory.length > 6) {
+        chatHistory = chatHistory.slice(-6);
+      }
+    } catch (err) {
+      console.error("Chat error:", err);
+      removeTypingIndicator(typingId);
+      appendMessage(
+        "Terjadi kendala jaringan saat menghubungi server. Anda dapat langsung membuka katalog toko atau chat CS kami di WhatsApp: 081331208493!",
+        "bot"
+      );
     }
-  } catch (err) {
-    console.error("Chat error:", err);
-    removeTypingIndicator(typingId);
-    appendMessage(
-      "Terjadi kendala jaringan saat menghubungi server. Anda dapat langsung membuka katalog toko atau chat CS kami di WhatsApp!",
-      "bot"
-    );
-  }
-});
+  });
+}
 
 function appendMessage(text, sender) {
+  if (!chatMessages) return;
   const msgDiv = document.createElement("div");
   msgDiv.className = `message-bubble ${sender}`;
 
-  const timeLabel = sender === "user" ? "Anda" : "AI Infarm";
+  const timeLabel = sender === "user" ? "Anda" : "Konsultan Infarm";
   msgDiv.innerHTML = `
     <div class="bubble-content">${formatChatMessage(text)}</div>
     <span class="bubble-time">${timeLabel} &bull; ${new Date().toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' })}</span>
@@ -293,13 +364,14 @@ function appendMessage(text, sender) {
 }
 
 function appendTypingIndicator() {
+  if (!chatMessages) return null;
   const id = `typing-${Date.now()}`;
   const typingDiv = document.createElement("div");
   typingDiv.className = "message-bubble bot";
   typingDiv.id = id;
   typingDiv.innerHTML = `
     <div class="bubble-content" style="color: #64748b; font-style: italic;">
-      AI sedang mengetik...
+      Konsultan AI sedang mengetik...
     </div>
   `;
   chatMessages.appendChild(typingDiv);
@@ -328,46 +400,40 @@ async function checkBotStatus() {
         if (botNumberText) botNumberText.textContent = "Aktif";
       }
       if (statusDot) statusDot.className = "status-indicator ready";
-      startBtn.classList.add("hidden");
-      stopBtn.classList.remove("hidden");
-      readySection.classList.remove("hidden");
-      qrSection.classList.add("hidden");
+      if (startBtn) startBtn.classList.add("hidden");
+      if (stopBtn) stopBtn.classList.remove("hidden");
+      if (readySection) readySection.classList.remove("hidden");
+      if (qrSection) qrSection.classList.add("hidden");
       currentQRCode = null;
     } else if (data.hasQRCode) {
       if (botNumberText) botNumberText.textContent = "-";
       statusText.textContent = "Menunggu Scan QR";
       if (statusDot) statusDot.className = "status-indicator waiting";
-      qrSection.classList.remove("hidden");
-      readySection.classList.add("hidden");
-      startBtn.classList.add("hidden");
-      stopBtn.classList.remove("hidden");
+      if (qrSection) qrSection.classList.remove("hidden");
+      if (readySection) readySection.classList.add("hidden");
+      if (startBtn) startBtn.classList.add("hidden");
+      if (stopBtn) stopBtn.classList.remove("hidden");
       loadQRCode();
     } else if (data.isInitializing) {
       statusText.textContent = "Menginisialisasi Bot WhatsApp...";
       if (statusDot) statusDot.className = "status-indicator waiting";
-      startBtn.classList.add("hidden");
-      stopBtn.classList.remove("hidden");
-      qrSection.classList.remove("hidden");
-      readySection.classList.add("hidden");
-    } else if (data.isVercel) {
-      statusText.textContent = "Serverless Cloud (Vercel)";
-      if (statusDot) statusDot.className = "status-indicator ready";
-      startBtn.classList.add("hidden");
-      stopBtn.classList.add("hidden");
+      if (startBtn) startBtn.classList.add("hidden");
+      if (stopBtn) stopBtn.classList.remove("hidden");
+      if (qrSection) qrSection.classList.remove("hidden");
+      if (readySection) readySection.classList.add("hidden");
+      const qrEl = document.getElementById("qrcode");
+      if (qrEl) qrEl.innerHTML = '<div class="loading-spinner">Mempersiapkan browser & QR code...</div>';
     } else {
       statusText.textContent = "Bot Offline";
       if (statusDot) statusDot.className = "status-indicator";
-      startBtn.classList.remove("hidden");
-      stopBtn.classList.add("hidden");
-      readySection.classList.add("hidden");
-      qrSection.classList.add("hidden");
-      currentQRCode = null;
+      if (startBtn) startBtn.classList.remove("hidden");
+      if (stopBtn) stopBtn.classList.add("hidden");
+      if (qrSection) qrSection.classList.add("hidden");
+      if (readySection) readySection.classList.add("hidden");
     }
-  } catch (error) {
-    statusText.textContent = "Server Offline (Jalankan 'npm run dev')";
+  } catch (err) {
+    if (statusText) statusText.textContent = "Server Serverless (Vercel Mode)";
     if (statusDot) statusDot.className = "status-indicator";
-    startBtn.classList.remove("hidden");
-    stopBtn.classList.add("hidden");
   }
 }
 
@@ -375,161 +441,122 @@ async function loadQRCode() {
   try {
     const response = await fetch(`${API_URL}/bot/qr`);
     const data = await response.json();
-    if (data.qr && data.qr !== currentQRCode) {
-      currentQRCode = data.qr;
-      const qrContainer = document.getElementById("qrcode");
-      qrContainer.innerHTML = `<img width="260" height="260" alt="QR Code WhatsApp" src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(data.qr)}">`;
+    const qrContainer = document.getElementById("qrcode");
+    if (!qrContainer) return;
+
+    if (data.qrCode) {
+      if (currentQRCode !== data.qrCode) {
+        currentQRCode = data.qrCode;
+        qrContainer.innerHTML = "";
+        if (window.QRCode) {
+          new window.QRCode(qrContainer, {
+            text: data.qrCode,
+            width: 256,
+            height: 256,
+            colorDark: "#0f172a",
+            colorLight: "#ffffff",
+            correctLevel: window.QRCode.CorrectLevel.M
+          });
+        } else {
+          qrContainer.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${encodeURIComponent(data.qrCode)}" alt="QR WhatsApp" style="max-width:256px; border-radius:8px;">`;
+        }
+      }
+    } else {
+      qrContainer.innerHTML = '<div class="loading-spinner">Menunggu QR Code dari WhatsApp Web...</div>';
     }
-  } catch (error) {
-    console.error("Gagal memuat QR Code:", error);
+  } catch (err) {
+    console.error("Gagal load QR:", err);
   }
 }
 
+// Bot Control Handlers
 if (startBtn) {
-  startBtn.onclick = async () => {
+  startBtn.addEventListener("click", async () => {
     try {
       startBtn.disabled = true;
       startBtn.textContent = "Memulai...";
-      await fetch(`${API_URL}/bot/start`, { method: "POST" });
-    } catch (error) {
-      console.error("Error memulai bot:", error);
-      alert("Gagal mengirim perintah start ke server.");
+      const res = await fetch(`${API_URL}/bot/start`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) alert(data.error || "Gagal memulai bot");
+      checkBotStatus();
+    } catch (e) {
+      alert("Error: " + e.message);
     } finally {
       startBtn.disabled = false;
-      startBtn.textContent = "Mulai Bot";
-      checkBotStatus();
+      startBtn.textContent = "Mulai Bot WA";
     }
-  };
+  });
 }
 
 if (stopBtn) {
-  stopBtn.onclick = async () => {
+  stopBtn.addEventListener("click", async () => {
     try {
       stopBtn.disabled = true;
       stopBtn.textContent = "Menghentikan...";
       await fetch(`${API_URL}/bot/stop`, { method: "POST" });
-    } catch (error) {
-      console.error("Error menghentikan bot:", error);
-      alert("Gagal mengirim perintah stop ke server.");
+      checkBotStatus();
+    } catch (e) {
+      alert("Error: " + e.message);
     } finally {
       stopBtn.disabled = false;
       stopBtn.textContent = "Hentikan Bot";
-      checkBotStatus();
     }
-  };
+  });
 }
 
 if (resetBtn) {
-  resetBtn.onclick = async () => {
-    if (!confirm("Apakah Anda yakin ingin mereset sesi WhatsApp? Anda harus scan QR ulang.")) {
-      return;
-    }
+  resetBtn.addEventListener("click", async () => {
+    if (!confirm("Yakin ingin mereset sesi WhatsApp? Anda perlu scan QR ulang.")) return;
     try {
       resetBtn.disabled = true;
-      resetBtn.textContent = "Mereset...";
-      const res = await fetch(`${API_URL}/bot/reset`, { method: "POST" });
-      const data = await res.json();
-      if (data.success) {
-        alert(data.message || "Sesi WhatsApp berhasil dibersihkan!");
-      } else {
-        alert("Gagal mereset: " + (data.error || "Kesalahan server"));
-      }
-    } catch (error) {
-      console.error("Error mereset bot:", error);
-      alert("Gagal menghubungi endpoint reset.");
+      await fetch(`${API_URL}/bot/reset`, { method: "POST" });
+      alert("Sesi WhatsApp berhasil direset.");
+      checkBotStatus();
+    } catch (e) {
+      alert("Error: " + e.message);
     } finally {
       resetBtn.disabled = false;
-      resetBtn.textContent = "Reset Sesi WA";
-      checkBotStatus();
     }
-  };
+  });
 }
 
-// Load Knowledge FAQ
-async function loadKnowledgeList() {
-  if (!knowledgeList) return;
+// Load Quota & Knowledge
+async function loadQuota() {
   try {
-    const res = await fetch(`${API_URL}/knowledge`);
-    const data = await res.json();
-    const responses = data.responses || {};
-    const keys = Object.keys(responses);
-    if (keys.length === 0) {
-      knowledgeList.innerHTML = "<em>Belum ada kata kunci kustom.</em>";
-      return;
-    }
-    knowledgeList.innerHTML = keys
-      .map(k => `<span class="tag-item" title="${responses[k]}"><strong>${k}</strong></span>`)
-      .join("");
-  } catch (err) {
-    knowledgeList.innerHTML = "<em>Gagal memuat basis pengetahuan.</em>";
-  }
-}
-
-// Load Groq Quota
-async function loadGroqQuota(isFresh = false) {
-  try {
-    const url = isFresh ? `${API_URL}/groq/quota?fresh=true` : `${API_URL}/groq/quota`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Gagal mengambil data kuota");
-    const data = await res.json();
-
-    if (data.configured) {
-      if (groqModelName) groqModelName.textContent = data.model || "-";
-      if (groqLastChecked) groqLastChecked.textContent = `Pembaruan: ${data.lastChecked || "Baru saja"}`;
-
-      if (data.remainingRequests !== null && data.limitRequests !== null) {
-        if (groqReqRemaining) {
-          groqReqRemaining.textContent = `${Number(data.remainingRequests).toLocaleString()} / ${Number(data.limitRequests).toLocaleString()}`;
-        }
-        if (groqReqBar) {
-          const pct = Math.max(0, Math.min(100, (data.remainingRequests / data.limitRequests) * 100));
-          groqReqBar.style.width = `${pct}%`;
-          groqReqBar.className = pct < 20 ? "progress-bar-fill danger" : pct < 50 ? "progress-bar-fill warning" : "progress-bar-fill";
-        }
-        if (groqReqReset && data.resetRequests) {
-          groqReqReset.textContent = `Reset dalam: ${data.resetRequests}`;
-        }
-      } else {
-        if (groqReqRemaining) groqReqRemaining.textContent = "Aktif (Menunggu data)";
-      }
-
-      if (data.remainingTokens !== null && data.limitTokens !== null) {
-        if (groqTokenRemaining) {
-          groqTokenRemaining.textContent = `${Number(data.remainingTokens).toLocaleString()} / ${Number(data.limitTokens).toLocaleString()}`;
-        }
-        if (groqTokenBar) {
-          const pct = Math.max(0, Math.min(100, (data.remainingTokens / data.limitTokens) * 100));
-          groqTokenBar.style.width = `${pct}%`;
-        }
-      } else {
-        if (groqTokenRemaining) groqTokenRemaining.textContent = "Aktif (Menunggu data)";
-      }
-    } else {
-      if (groqModelName) groqModelName.textContent = "Belum Dikonfigurasi (.env)";
-      if (groqReqRemaining) groqReqRemaining.textContent = "-";
-      if (groqTokenRemaining) groqTokenRemaining.textContent = "-";
-    }
-  } catch (err) {
-    // console.warn("Gagal memuat kuota Groq:", err);
+    const res = await fetch(`${API_URL}/quota`);
+    if (!res.ok) return;
+    const q = await res.json();
+    if (groqReqRemaining) groqReqRemaining.textContent = q.requestsRemaining || "14.400";
+    if (groqTokenRemaining) groqTokenRemaining.textContent = q.tokensRemaining || "6.000";
+    if (groqModelName) groqModelName.textContent = q.currentModel || "qwen/qwen3.8-27b";
+    if (groqReqReset) groqReqReset.textContent = `Reset dalam: ${q.requestsReset || "24 jam"}`;
+    if (groqLastChecked) groqLastChecked.textContent = `Pembaruan: ${new Date().toLocaleTimeString("id-ID")}`;
+  } catch (e) {
+    console.warn("Gagal memuat kuota:", e);
   }
 }
 
 if (refreshQuotaBtn) {
-  refreshQuotaBtn.onclick = async () => {
-    refreshQuotaBtn.disabled = true;
-    refreshQuotaBtn.textContent = "Memeriksa...";
-    await loadGroqQuota(true);
-    refreshQuotaBtn.disabled = false;
-    refreshQuotaBtn.textContent = "Perbarui Kuota";
-  };
+  refreshQuotaBtn.addEventListener("click", loadQuota);
 }
 
-// ================= INITIALIZATION =================
-loadProducts();
-loadKnowledgeList();
-checkBotStatus();
-loadGroqQuota();
+async function loadKnowledgeTags() {
+  if (!knowledgeList) return;
+  try {
+    const res = await fetch("/knowledge.json");
+    if (!res.ok) return;
+    const k = await res.json();
+    const keywords = Object.keys(k.keywords || {});
+    if (keywords.length === 0) return;
+    knowledgeList.innerHTML = keywords.map(kw => `<span class="tag-badge">${kw}</span>`).join("");
+  } catch (e) {
+    console.warn("Gagal load knowledge.json:", e);
+  }
+}
 
-setInterval(checkBotStatus, 5000);
-setInterval(() => loadGroqQuota(false), 20000);
-
+// Initialize on DOM Ready
+document.addEventListener("DOMContentLoaded", () => {
+  loadProducts();
+  loadKnowledgeTags();
+  loadQuota();
+});

@@ -150,12 +150,12 @@ async function handler(req, res) {
     if (!hasGroqKey) {
       if (ragContext) {
         return res.json({
-          reply: formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop* yang cocok:\n\n${ragContext}\n\nUntuk pemesanan dengan gratis ongkir, Anda dapat langsung checkout di toko resmi Shopee: https://shopee.co.id/infarm.id 🌱`),
+          reply: formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop* yang cocok:\n\n${ragContext}\n\nUntuk pemesanan dengan gratis ongkir, Anda dapat langsung checkout di toko resmi Shopee: https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp kami di 081331208493 🌱`),
           source: "rag_fallback"
         });
       }
       return res.json({
-        reply: formatWhatsAppMessage("Halo! Selamat datang di *Infarm.id Official Shop* 🌱.\n\nKami menyediakan beragam benih tanaman, pupuk organik, dan media tanam.\n\nKunjungi toko resmi kami di Shopee: https://shopee.co.id/infarm.id"),
+        reply: formatWhatsAppMessage("Halo! Selamat datang di *Infarm.id Official Shop* 🌱.\n\nKami menyediakan beragam benih tanaman, pupuk organik, dan media tanam.\n\nKunjungi toko resmi kami di Shopee: https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp kami di 081331208493"),
         source: "default_fallback"
       });
     }
@@ -176,8 +176,8 @@ PRINSIP KEAKURATAN DATA PRODUK (BERPIJAK KETAT PADA KATALOG RESMI INFARM):
  - Jawab pertanyaan spesifik langsung dalam 1-2 paragraf singkat.
  - Jika pelanggan meminta "semua produk" atau "katalog", kelompokkan berdasarkan kategori (*Koleksi Benih*, *Koleksi Pupuk & Nutrisi*, *Koleksi Pestisida Nabati*, *Koleksi Media Tanam*, *Peralatan Berkebun*).
  - Jika menanyakan barang di luar katalog, jawab sopan bahwa produk tersebut belum tersedia di katalog saat ini dan sarankan menghubungi CS resmi kami:
-   *WhatsApp CS:* +62 812-3456-7890
-   *Toko Shopee:* https://shopee.co.id/infarm.id
+   *WhatsApp CS:* +62 813-3120-8493 (081331208493)
+   *Toko Shopee:* https://shopee.co.id/infarmofficialshop
    *Jam Operasional:* Senin - Sabtu (08.00 - 17.00 WIB)
 4. Format Tampilan Pesan:
  - Gunakan SATU bintang untuk cetak tebal (*teks*). Jangan gunakan dua bintang (**teks**).
@@ -227,13 +227,13 @@ ${ragContext ? ragContext : "Konteks Katalog: (Tidak ada katalog spesifik yang c
     console.error("Handler error:", err);
     if (ragContext) {
       return res.json({
-        reply: formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop*:\n\n${ragContext}\n\nAda yang bisa kami bantu seputar produk berkebun di atas? Kunjungi Shopee kami di https://shopee.co.id/infarm.id 🌱`),
+        reply: formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop*:\n\n${ragContext}\n\nAda yang bisa kami bantu seputar produk berkebun di atas? Kunjungi Shopee kami di https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp di 081331208493 🌱`),
         source: "error_fallback_with_rag"
       });
     }
     return res.status(500).json({
       error: err.message,
-      reply: "Mohon maaf, sistem sedang sibuk. Silakan kunjungi https://shopee.co.id/infarm.id atau hubungi CS kami di +62 812-3456-7890."
+      reply: "Mohon maaf, sistem sedang sibuk. Silakan kunjungi toko Shopee kami di https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp kami di 081331208493."
     });
   }
 }

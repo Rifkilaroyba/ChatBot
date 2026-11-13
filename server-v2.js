@@ -223,7 +223,7 @@ function initializeClient() {
     } catch (err) {
       console.error("Error memproses pesan:", err);
       try {
-        await msg.reply("Mohon maaf, sistem asisten sedang mengalami kendala jaringan. Silakan hubungi kami via Shopee: https://shopee.co.id/infarm.id atau coba beberapa saat lagi.");
+        await msg.reply("Mohon maaf, sistem asisten sedang mengalami kendala jaringan. Silakan hubungi kami via Shopee: https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp di 081331208493.");
       } catch (replyErr) {
         console.error("Gagal mengirim pesan error fallback:", replyErr);
       }
@@ -336,11 +336,11 @@ async function getAIResponse(senderId, message) {
       } else {
         // Fallback jika API Key Groq belum diisi
         if (ragContext) {
-          const fallbackWithRag = `Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop* yang sesuai dengan pencarian Anda:\n\n${ragContext}\n\nUntuk pemesanan dengan gratis ongkir, Anda dapat langsung checkout di toko Shopee kami: https://shopee.co.id/infarm.id atau balas pesan ini! 🌱`;
+          const fallbackWithRag = `Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop* yang sesuai dengan pencarian Anda:\n\n${ragContext}\n\nUntuk pemesanan dengan gratis ongkir, Anda dapat langsung checkout di toko Shopee kami: https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp kami di 081331208493! 🌱`;
           if (senderId) appendUserHistory(senderId, message, fallbackWithRag);
           return formatWhatsAppMessage(fallbackWithRag);
         }
-        return "Halo! Selamat datang di Infarm.id Official Shop. Saat ini sistem asisten AI sedang dalam mode katalog lokal. Anda dapat langsung mengunjungi toko resmi kami di Shopee: https://shopee.co.id/infarm.id";
+        return "Halo! Selamat datang di Infarm.id Official Shop. Saat ini sistem asisten AI sedang dalam mode katalog lokal. Anda dapat langsung mengunjungi toko resmi kami di Shopee: https://shopee.co.id/infarmofficialshop atau hubungi CS kami di 081331208493";
       }
     }
 
@@ -358,8 +358,8 @@ PRINSIP KEAKURATAN DATA PRODUK (BERPIJAK KETAT PADA KATALOG RESMI INFARM):
  - Jawab pertanyaan spesifik langsung dalam 1-2 paragraf singkat.
  - Jika pelanggan meminta "semua produk" atau "katalog", kelompokkan berdasarkan kategori (*Koleksi Benih*, *Koleksi Pupuk & Nutrisi*, *Koleksi Pestisida Nabati*, *Koleksi Media Tanam*, *Peralatan Berkebun*).
  - Jika menanyakan barang di luar katalog, jawab sopan bahwa produk tersebut belum tersedia di katalog saat ini dan sarankan menghubungi CS resmi kami:
-   *WhatsApp CS:* +62 812-3456-7890
-   *Toko Shopee:* https://shopee.co.id/infarm.id
+   *WhatsApp CS:* +62 813-3120-8493 (081331208493)
+   *Toko Shopee:* https://shopee.co.id/infarmofficialshop
    *Jam Operasional:* Senin - Sabtu (08.00 - 17.00 WIB)
 4. Format Tampilan Pesan:
  - Gunakan SATU bintang untuk cetak tebal (*teks*). Jangan gunakan dua bintang (**teks**).
@@ -412,11 +412,11 @@ ${ragContext ? ragContext : "Konteks Katalog: (Tidak ada katalog spesifik yang c
   } catch (error) {
     console.error("Error Groq API:", error.message || error);
     if (ragContext) {
-      const fallbackReply = formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop*:\n\n${ragContext}\n\nAda yang bisa kami bantu seputar produk berkebun di atas? Kunjungi juga Shopee kami di https://shopee.co.id/infarm.id 🌱`);
+      const fallbackReply = formatWhatsAppMessage(`Halo Kak! Berikut katalog produk resmi *Infarm.id Official Shop*:\n\n${ragContext}\n\nAda yang bisa kami bantu seputar produk berkebun di atas? Kunjungi juga Shopee kami di https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp di 081331208493 🌱`);
       if (senderId) appendUserHistory(senderId, message, fallbackReply);
       return fallbackReply;
     }
-    return formatWhatsAppMessage("Halo! Terima kasih telah menghubungi *Infarm.id Official Shop* 🌱.\n\nKami menyediakan beragam benih unggul, pupuk organik, media tanam, dan alat hidroponik.\n\nKunjungi toko resmi kami di Shopee: https://shopee.co.id/infarm.id untuk info produk dan promo lengkap!");
+    return formatWhatsAppMessage("Halo! Terima kasih telah menghubungi *Infarm.id Official Shop* 🌱.\n\nKami menyediakan beragam benih unggul, pupuk organik, media tanam, dan alat hidroponik.\n\nKunjungi toko resmi kami di Shopee: https://shopee.co.id/infarmofficialshop atau hubungi CS WhatsApp kami di 081331208493 untuk info produk dan promo lengkap!");
   }
 }
 
